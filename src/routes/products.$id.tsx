@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Layout } from "@/components/Layout";
 import { ProductCard } from "@/components/ProductCard";
-import { getProductWithRelated, type Product } from "@/lib/products";
+import { fetchProductWithRelated, type Product } from "@/lib/products";
 import { BRAND } from "@/lib/brand";
 import { useCart } from "@/lib/cart";
 import { Heart, Minus, Plus, ShoppingBag, Star, Truck, RefreshCw, ShieldCheck } from "lucide-react";
@@ -9,7 +9,7 @@ import { useState } from "react";
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
-    const result = await getProductWithRelated(params.id);
+    const result = await fetchProductWithRelated({ data: params.id });
     if (!result) throw notFound();
     return result;
   },

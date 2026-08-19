@@ -1,3 +1,4 @@
+import { createServerFn } from "@tanstack/react-start";
 import { sanity, urlFor } from "./sanity";
 import { fallbackProducts, fallbackCategories, type Category, type Product } from "@/data/products";
 
@@ -184,3 +185,15 @@ function relatedTo(product: Product, pool: Product[]): Product[] {
   const filler = pool.filter((p) => p.id !== product.id && p.category !== product.category);
   return [...sameCategory, ...filler].slice(0, 4);
 }
+
+/**
+ * Sanity's API rejects browser requests from origins that aren't in the project's
+ * CORS allowlist, so the loaders must never query it from the client. These server
+ * functions keep every Sanity call on the server: the initial SSR render calls the
+ * handler directly, and client-side navigations fetch it over RPC.
+ */
+export const fetchCatalog = createServerFn({ method: "GET" }).handler(() => getCatalog());
+
+export const fetchProductWithRelated = createServerFn({ method: "GET" })
+  .validator((id: string) => id)
+  .handler(({ data }) => getProductWithRelated(data));

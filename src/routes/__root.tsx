@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 import { CartProvider } from "@/lib/cart";
 import { CatalogProvider } from "@/lib/catalog";
-import { getCatalog } from "@/lib/products";
+import { fetchCatalog } from "@/lib/products";
 import { BRAND } from "@/lib/brand";
 
 import appCss from "../styles.css?url";
@@ -80,7 +80,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // The catalogue is loaded once here so the header, cart and every page share it.
-  loader: () => getCatalog(),
+  loader: () => fetchCatalog(),
   // Bounds how long a Studio edit can take to appear; one Sanity query per minute.
   staleTime: 60 * 1000,
   head: () => ({
